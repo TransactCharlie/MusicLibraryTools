@@ -9,6 +9,10 @@ class TestLibraryEntry(unittest.TestCase):
         self.mp3 = LibraryEntry("music_files/mp3sample.mp3")
         self.m4a = LibraryEntry("music_files/m4asample.m4a")
 
+    def tearDown(self):
+        self.mp3 = None
+        self.m4a = None
+
     def test_can_read_m4a_tag(self):
         self.assertIsNotNone(self.m4a.etags)
 
@@ -23,6 +27,5 @@ class TestLibraryEntry(unittest.TestCase):
         self.assertEqual(self.mp3.etags["albumartist"], ["test1"])
 
     def test_can_get_unused_tag_from_tags(self):
-        print self.mp3.tags
         self.assertIsNone(self.mp3.tags['foo'])
         self.assertIsNone(self.m4a.tags['foo'])

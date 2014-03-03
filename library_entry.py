@@ -12,13 +12,14 @@ EasyID3.RegisterTextKey("albumartist", "TPE2")
 
 class LibraryEntry(object):
 
-    tags = defaultdict(lambda: None)
+
 
     def __init__(self, filename):
         self.filename = filename
         self.etags = mutagen.File(filename, easy = True)
         self.mimetype = self.etags.mime[0]
 
+        self.tags = defaultdict(lambda: None)
         # Populate the self tags
         for k, v in self.etags.items():
             self.tags[k] = v
