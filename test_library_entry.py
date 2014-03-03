@@ -21,3 +21,8 @@ class TestLibraryEntry(unittest.TestCase):
     def test_can_set_albumartist_in_mp3_file(self):
         self.mp3.etags["albumartist"] = "test1"
         self.assertEqual(self.mp3.etags["albumartist"], ["test1"])
+
+    def test_can_get_unused_tag_from_tags(self):
+        print self.mp3.tags
+        self.assertIsNone(self.mp3.tags['foo'])
+        self.assertIsNone(self.m4a.tags['foo'])
