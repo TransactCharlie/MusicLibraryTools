@@ -29,3 +29,10 @@ class TestLibraryEntry(unittest.TestCase):
     def test_can_get_unused_tag_from_tags(self):
         self.assertIsNone(self.mp3.tags['foo'])
         self.assertIsNone(self.m4a.tags['foo'])
+
+    def test_can_delete_unwanted_tags(self):
+        self.mp3.etags["albumartist"] = "keep"
+        self.mp3.etags["composer"] = "to_be_deleted"
+        self.mp3.remove_unwanted_tags()
+        self.assertIsNotNone(self.mp3.tags["albumartist"])
+        self.assertIsNone(self.mp3.tags["composer"])
