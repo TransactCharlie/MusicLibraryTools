@@ -30,12 +30,22 @@ class LibraryEntry(object):
         return tags
 
 
+    def remove_tag(self, tag):
+        """removes {tag} from etags"""
+        del(self.etags[tag])
+
+
     def remove_unwanted_tags(self):
         """removes any extraneous information from tags (comments, etc)"""
         keep_tags = ["artist", "albumartist", "title", "tracknumber", "album", "discnumber", "date", "genre"]
         for k in (k for k in self.etags.keys() if k not in keep_tags):
-            del(self.etags[k])
+            self.remove_tag(k)
 
 
-    def fix_artist_album_artist(self, force_overwrite = False):
+    def populate_albumartist_from_artist(self, force_overwrite = False):
         """populates albumartist tags from artist if the tag is empty of doesn't exist"""
+        if self.tags["artist"] == []:
+            return
+
+        if force_overwrite or self.tags["albumartist"] == []:
+            self.etags["albumartist"] = self.tags["artist"]

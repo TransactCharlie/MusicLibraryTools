@@ -42,3 +42,21 @@ class TestLibraryEntry(unittest.TestCase):
         self.m4a.remove_unwanted_tags()
         self.assertTrue("albumartist" in self.m4a.etags)
         self.assertTrue("comment" not in self.m4a.etags)
+
+    def test_delete_etag(self):
+        self.mp3.remove_tag("artist")
+        self.assertTrue("artist" not in self.mp3.etags)
+
+        self.m4a.remove_tag("artist")
+        self.assertTrue("artist" not in self.m4a.etags)
+
+    def test_populate_albumartist_from_artist(self):
+        self.mp3.remove_tag("albumartist")
+        self.mp3.etags["artist"] = "populate_albumartist"
+        self.mp3.populate_albumartist_from_artist()
+        self.assertEqual(self.mp3.tags["albumartist"], ["populate_albumartist"])
+
+        self.m4a.remove_tag("albumartist")
+        self.m4a.etags["artist"] = "populate_albumartist"
+        self.m4a.populate_albumartist_from_artist()
+        self.assertEqual(self.m4a.tags["albumartist"], ["populate_albumartist"])
