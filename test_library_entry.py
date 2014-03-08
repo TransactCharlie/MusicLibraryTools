@@ -27,12 +27,18 @@ class TestLibraryEntry(unittest.TestCase):
         self.assertEqual(self.mp3.etags["albumartist"], ["test1"])
 
     def test_can_get_unused_tag_from_tags(self):
-        self.assertIsNone(self.mp3.tags['foo'])
-        self.assertIsNone(self.m4a.tags['foo'])
+        self.assertEqual(self.mp3.tags['NO_SUCH_TAG'], [])
+        self.assertEqual(self.m4a.tags['NO_SUCH_TAG'], [])
 
     def test_can_delete_unwanted_tags(self):
         self.mp3.etags["albumartist"] = "keep"
         self.mp3.etags["composer"] = "to_be_deleted"
         self.mp3.remove_unwanted_tags()
-        self.assertIsNotNone(self.mp3.tags["albumartist"])
-        self.assertIsNone(self.mp3.tags["composer"])
+        self.assertTrue("albumartist" in self.mp3.etags)
+        self.assertTrue("composer" not in self.mp3.etags)
+
+        self.m4a.etags["albumartist"] = "keep"
+        self.m4a.etags["comment"] = "to_be_deleted"
+        self.m4a.remove_unwanted_tags()
+        self.assertTrue("albumartist" in self.m4a.etags)
+        self.assertTrue("comment" not in self.m4a.etags)

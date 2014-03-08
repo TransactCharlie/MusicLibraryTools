@@ -19,16 +19,23 @@ class LibraryEntry(object):
         self.etags = mutagen.File(filename, easy = True)
         self.mimetype = self.etags.mime[0]
 
+
     @property
     def tags(self):
-        tags = defaultdict(lambda: None)
+        """returns a defaultdict of the etags. useful for checking for keys that don't exist"""
+        tags = defaultdict(lambda: [])
         # Populate the self tags
         for k, v in self.etags.items():
             tags[k] = v
         return tags
+
 
     def remove_unwanted_tags(self):
         """removes any extraneous information from tags (comments, etc)"""
         keep_tags = ["artist", "albumartist", "title", "tracknumber", "album", "discnumber", "date", "genre"]
         for k in (k for k in self.etags.keys() if k not in keep_tags):
             del(self.etags[k])
+
+
+    def fix_artist_album_artist(self, force_overwrite = False):
+        """populates albumartist tags from artist if the tag is empty of doesn't exist"""
